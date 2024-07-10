@@ -1,0 +1,10 @@
+{
+  "version": "v0.1.0",
+  "config": {
+    "date-format": "%Y-%m-%d %T",
+    "header": "fabasoad-log-json",
+    "output-format": "text",
+    "text-color": false,
+    "text-format": "[<header>] <time> level=<level> <message>"
+  }
+}
