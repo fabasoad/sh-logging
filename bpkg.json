@@ -1,0 +1,8 @@
+{
+  "name": "sh-logging",
+  "version": "v0.1.0",
+  "description": "Lightweight POSIX shell compatible library for logging",
+  "scripts": ["fabasoad-log", "fabasoad-log-init"],
+  "install": "make install",
+  "global": "true"
+}

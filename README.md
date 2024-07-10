@@ -1,2 +1,2 @@
-# sh-logging
-Lightweight POSIX shell compatible library for logging
+# sh-validators
+bpkg package with validators for different types
