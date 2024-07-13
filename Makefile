@@ -11,15 +11,15 @@ cleanup:
 
 install: cleanup
 	@for cmd in $(CMDS); do cp "$(current_dir)lib/$(BIN)-$${cmd}.sh" $(PREFIX)/bin/$(BIN)-$${cmd}; done
-	@echo "Operation completed successfully: install"
+	@echo "[fabasoad/sh-logging] Operation completed successfully: install"
 
 uninstall: cleanup
-	@echo "Operation completed successfully: uninstall"
+	@echo "[fabasoad/sh-logging] Operation completed successfully: uninstall"
 
 link: cleanup
 	@for cmd in $(CMDS); do ln -s "$(current_dir)lib/$(BIN)-$${cmd}.sh" $(PREFIX)/bin/$(BIN)-$${cmd}; done
-	@echo "Operation completed successfully: link"
+	@echo "[fabasoad/sh-logging] Operation completed successfully: link"
 
 unlink: cleanup
-	@echo "Operation completed successfully: unlink"
+	@echo "[fabasoad/sh-logging] Operation completed successfully: unlink"
 

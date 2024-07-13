@@ -6,6 +6,7 @@ fabasoad_log_init() {
   text_format="[<header>] <time> level=<level> <message>"
   date_format="%Y-%m-%d %T"
   text_color="true"
+  log_level="info"
 
   config_path="$1"
 
@@ -20,6 +21,14 @@ fabasoad_log_init() {
     text_color_temp=$(jq -r --arg var1 "${text_color}" 'try .config["text-color"] catch $var1' "${config_path}")
     if [ "${text_color_temp}" = "true" ] || [ "${text_color_temp}" = "false" ]; then
       text_color="${text_color_temp}"
+    fi
+    log_level_temp=$(jq -r --arg var1 "${log_level}" 'try .config["log-level"] catch $var1' "${config_path}")
+    if [ "${log_level_temp}" = "error" ] \
+      || [ "${log_level_temp}" = "warning" ] \
+      || [ "${log_level_temp}" = "info" ] \
+      || [ "${log_level_temp}" = "debug" ] \
+      || [ "${log_level_temp}" = "off" ]; then
+      log_level="${log_level_temp}"
     fi
   fi
 
@@ -41,6 +50,10 @@ fabasoad_log_init() {
 
   if [ -n "${text_color}" ]; then
     export FABASOAD_LOG_CONFIG_TEXT_COLOR="${text_color}"
+  fi
+
+  if [ -n "${log_level}" ]; then
+    export FABASOAD_LOG_CONFIG_LOG_LEVEL="${log_level}"
   fi
 }
 
