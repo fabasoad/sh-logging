@@ -3,6 +3,7 @@
   "config": {
     "date-format": "%Y-%m-%d %T",
     "header": "fabasoad-log-json",
+    "log-level": "info",
     "output-format": "text",
     "text-color": false,
     "text-format": "[<header>] <time> level=<level> <message>"
