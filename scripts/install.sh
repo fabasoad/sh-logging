@@ -7,5 +7,5 @@ ROOT_DIR=$(dirname "${SCRIPTS_DIR}")
 
 mkdir -p "${target_bin}"
 for cmd in ${cmds}; do
-  cp "${ROOT_DIR}/lib/${bin}-${cmd}.sh" "${target_bin}/${bin}-${cmd}"
+  cp "${ROOT_DIR}/lib/${cmd}.sh" "${target_bin}/${bin}-${cmd}"
 done
