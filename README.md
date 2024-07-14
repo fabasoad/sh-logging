@@ -1,5 +1,10 @@
 # Shell logging
 
+[![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg)](https://stand-with-ukraine.pp.ua)
+![GitHub release](https://img.shields.io/github/v/release/fabasoad/sh-logging?include_prereleases)
+![security](https://github.com/fabasoad/sh-logging/actions/workflows/security.yml/badge.svg)
+![linting](https://github.com/fabasoad/sh-logging/actions/workflows/linting.yml/badge.svg)
+
 Shell library for logging.
 
 ## Table of Contents
