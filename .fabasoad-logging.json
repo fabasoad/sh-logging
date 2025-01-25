@@ -6,6 +6,6 @@
     "log-level": "info",
     "output-format": "text",
     "text-color": false,
-    "text-format": "[<header>] <time> level=<level> <message>"
+    "text-format": "[<header>] <timestamp> level=<level> <message>"
   }
 }
