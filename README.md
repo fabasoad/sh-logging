@@ -9,14 +9,21 @@ Shell library for logging.
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Supported parameters](#supported-parameters)
-  - [Log level](#log-level)
-  - [Output format](#output-format)
-  - [Date format](#date-format)
-  - [Header](#header)
-  - [Text color](#text-color)
-  - [Text format](#text-format)
+- [Shell logging](#shell-logging)
+  - [Table of Contents](#table-of-contents)
+  - [Outline](#outline)
+  - [How to use?](#how-to-use)
+    - [Prerequisites](#prerequisites)
+    - [Installation](#installation)
+  - [Features](#features)
+    - [Config file](#config-file)
+    - [Supported parameters](#supported-parameters)
+      - [Log level](#log-level)
+      - [Output format](#output-format)
+      - [Date format](#date-format)
+      - [Header](#header)
+      - [Text color](#text-color)
+      - [Text format](#text-format)
 
 ## Outline
 
@@ -66,7 +73,7 @@ Where `./config.json` has the following content:
     "log-level": "info",
     "output-format": "text",
     "text-color": false,
-    "text-format": "[<header>] <time> level=<level> <message>"
+    "text-format": "[<header>] <timestamp> level=<level> <message>"
   }
 }
 ```
@@ -146,13 +153,13 @@ The format/pattern of the text logs. It works only if output format is set to `t
 
 - Environment variable: `FABASOAD_LOG_CONFIG_TEXT_FORMAT`.
 - Possible options: Any `string` value.
-- Default value: `[<header>] <time> level=<level> <message>`.
+- Default value: `[<header>] <timestamp> level=<level> <message>`.
 
-It supports the following templates: `<header>`, `<time>`, `<level>`, `<message>`.
-For example, if you want your logs to be like this:
+It supports the following templates: `<header>`, `<timestamp>`, `<level>`,
+`<message>`. For example, if you want your logs to be like this:
 
 ```text
 [my-app] [info] "2024-07-14 21:30:47" Downloading binary
 ```
 
-Then you need to set text format to `[<header>] [<level>] "<time>" <message>`.
+Then you need to set text format to `[<header>] [<level>] "<timestamp>" <message>`.

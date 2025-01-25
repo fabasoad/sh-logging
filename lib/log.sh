@@ -4,66 +4,55 @@ FABASOAD_LOG_CONFIG_OUTPUT_FORMAT_DEFAULT="text"
 FABASOAD_LOG_CONFIG_DATE_FORMAT_DEFAULT="%Y-%m-%d %T"
 FABASOAD_LOG_CONFIG_HEADER_DEFAULT="fabasoad-log"
 FABASOAD_LOG_CONFIG_TEXT_COLOR_DEFAULT="true"
-FABASOAD_LOG_CONFIG_TEXT_FORMAT_DEFAULT="[<header>] <time> level=<level> <message>"
+FABASOAD_LOG_CONFIG_TEXT_FORMAT_DEFAULT="[<header>] <timestamp> level=<level> <message>"
 FABASOAD_LOG_CONFIG_LOG_LEVEL_DEFAULT="info"
 
 # Initialization
 
+_get_from_config_or_default() {
+  jq -r --arg p "${1}" --arg d "${3}" 'try .config[$p] catch $d' "${2}"
+}
+
 _fabasoad_log_init() {
-  header="[fabasoad-log]"
-  output_format="text"
-  text_format="[<header>] <time> level=<level> <message>"
-  date_format="%Y-%m-%d %T"
-  text_color="true"
-  log_level="info"
+  header="${FABASOAD_LOG_CONFIG_HEADER_DEFAULT}"
+  output_format="${FABASOAD_LOG_CONFIG_OUTPUT_FORMAT_DEFAULT}"
+  text_format="${FABASOAD_LOG_CONFIG_TEXT_FORMAT_DEFAULT}"
+  date_format="${FABASOAD_LOG_CONFIG_DATE_FORMAT_DEFAULT}"
+  text_color="${FABASOAD_LOG_CONFIG_TEXT_COLOR_DEFAULT}"
+  log_level="${FABASOAD_LOG_CONFIG_LOG_LEVEL_DEFAULT}"
 
   config_path="${1}"
 
   if [ -f "${config_path}" ]; then
-    header=$(jq -r --arg var1 "${header}" 'try .config.header catch $var1' "${config_path}")
-    output_format_temp=$(jq -r --arg var1 "${output_format}" 'try .config["output-format"] catch $var1' "${config_path}")
-    if [ "${output_format_temp}" = "json" ] || [ "${output_format_temp}" = "xml" ] || [ "${output_format_temp}" = "text" ]; then
-      output_format="${output_format_temp}"
-    fi
-    text_format=$(jq -r --arg var1 "${text_format}" 'try .config["text-format"] catch $var1' "${config_path}")
-    date_format=$(jq -r --arg var1 "${date_format}" 'try .config["date-format"] catch $var1' "${config_path}")
-    text_color_temp=$(jq -r --arg var1 "${text_color}" 'try .config["text-color"] catch $var1' "${config_path}")
-    if [ "${text_color_temp}" = "true" ] || [ "${text_color_temp}" = "false" ]; then
-      text_color="${text_color_temp}"
-    fi
-    log_level_temp=$(jq -r --arg var1 "${log_level}" 'try .config["log-level"] catch $var1' "${config_path}")
-    if [ "${log_level_temp}" = "error" ] \
-      || [ "${log_level_temp}" = "warning" ] \
-      || [ "${log_level_temp}" = "info" ] \
-      || [ "${log_level_temp}" = "debug" ] \
-      || [ "${log_level_temp}" = "off" ]; then
-      log_level="${log_level_temp}"
-    fi
+    header=$(_get_from_config_or_default "header" "${config_path}" "${FABASOAD_LOG_CONFIG_HEADER_DEFAULT}")
+    tmp=$(_get_from_config_or_default "output-format" "${config_path}" "${FABASOAD_LOG_CONFIG_OUTPUT_FORMAT_DEFAULT}")
+    case "${tmp}" in
+      json|xml|text)
+        output_format="${tmp}"
+        ;;
+    esac
+    text_format=$(_get_from_config_or_default "text-format" "${config_path}" "${FABASOAD_LOG_CONFIG_TEXT_FORMAT_DEFAULT}")
+    date_format=$(_get_from_config_or_default "date-format" "${config_path}" "${FABASOAD_LOG_CONFIG_DATE_FORMAT_DEFAULT}")
+    tmp=$(_get_from_config_or_default "text-color" "${config_path}" "${FABASOAD_LOG_CONFIG_TEXT_COLOR_DEFAULT}")
+    case "${tmp}" in
+      true|false)
+        text_color="${tmp}"
+        ;;
+    esac
+    tmp=$(_get_from_config_or_default "log-level" "${config_path}" "${FABASOAD_LOG_CONFIG_LOG_LEVEL_DEFAULT}")
+    case "${tmp}" in
+      error|warning|info|debug|off)
+        log_level="${tmp}"
+        ;;
+    esac
   fi
 
-  if [ -n "${header}" ]; then
-    export FABASOAD_LOG_CONFIG_HEADER="${header}"
-  fi
-
-  if [ -n "${output_format}" ]; then
-    export FABASOAD_LOG_CONFIG_OUTPUT_FORMAT="${output_format}"
-  fi
-
-  if [ -n "${text_format}" ]; then
-    export FABASOAD_LOG_CONFIG_TEXT_FORMAT="${text_format}"
-  fi
-
-  if [ -n "${date_format}" ]; then
-    export FABASOAD_LOG_CONFIG_DATE_FORMAT="${date_format}"
-  fi
-
-  if [ -n "${text_color}" ]; then
-    export FABASOAD_LOG_CONFIG_TEXT_COLOR="${text_color}"
-  fi
-
-  if [ -n "${log_level}" ]; then
-    export FABASOAD_LOG_CONFIG_LOG_LEVEL="${log_level}"
-  fi
+  export FABASOAD_LOG_CONFIG_HEADER="${header:-${FABASOAD_LOG_CONFIG_HEADER_DEFAULT}}"
+  export FABASOAD_LOG_CONFIG_OUTPUT_FORMAT="${output_format:-${FABASOAD_LOG_CONFIG_OUTPUT_FORMAT_DEFAULT}}"
+  export FABASOAD_LOG_CONFIG_TEXT_FORMAT="${text_format:-${FABASOAD_LOG_CONFIG_TEXT_FORMAT_DEFAULT}}"
+  export FABASOAD_LOG_CONFIG_DATE_FORMAT="${date_format:-${FABASOAD_LOG_CONFIG_DATE_FORMAT_DEFAULT}}"
+  export FABASOAD_LOG_CONFIG_TEXT_COLOR="${text_color:-${FABASOAD_LOG_CONFIG_TEXT_COLOR_DEFAULT}}"
+  export FABASOAD_LOG_CONFIG_LOG_LEVEL="${log_level:-${FABASOAD_LOG_CONFIG_LOG_LEVEL_DEFAULT}}"
 }
 
 # Text modifications
@@ -155,7 +144,7 @@ _fabasoad_log_text() {
 
   text_msg="${FABASOAD_LOG_CONFIG_TEXT_FORMAT:-${FABASOAD_LOG_CONFIG_TEXT_FORMAT_DEFAULT}}"
   text_msg=${text_msg/<header>/${FABASOAD_LOG_CONFIG_HEADER:-${FABASOAD_LOG_CONFIG_HEADER_DEFAULT}}}
-  text_msg=${text_msg/<time>/$(date +"${FABASOAD_LOG_CONFIG_DATE_FORMAT:-${FABASOAD_LOG_CONFIG_DATE_FORMAT_DEFAULT}}")}
+  text_msg=${text_msg/<timestamp>/$(date +"${FABASOAD_LOG_CONFIG_DATE_FORMAT:-${FABASOAD_LOG_CONFIG_DATE_FORMAT_DEFAULT}}")}
   text_msg=${text_msg/<level>/$(_fabasoad_wrap_text_with_bold "${level}")}
   text_msg=${text_msg/<message>/${message}}
 
