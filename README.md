@@ -50,7 +50,8 @@ The following tools have to be available on a machine prior using this library:
 bpkg install fabasoad/sh-logging
 ```
 
-More information on installation options you can find [here](https://github.com/bpkg/bpkg?tab=readme-ov-file#installing-packages).
+See [installation options](https://github.com/bpkg/bpkg?tab=readme-ov-file#installing-packages)
+for more details.
 
 ## Features
 
@@ -163,3 +164,7 @@ It supports the following templates: `<header>`, `<timestamp>`, `<level>`,
 ```
 
 Then you need to set text format to `[<header>] [<level>] "<timestamp>" <message>`.
+
+## Contributions
+
+![Alt](https://repobeats.axiom.co/api/embed/dbcfa742767def40574e8a3f4b33ca544834b758.svg "Repobeats analytics image")
